@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# List desktops. The current desktop is marked with an asterisk.
+# The format of the desktop list:
+# <desktop ID> [-*] <geometry> <viewport> <workarea> <title>
+WORKSPACE=`wmctrl -d | grep -Po "^[0-9]+(?=[[:space:]]+\* )"`
+
+# List windows managed by the window manager.
+# The format of the window list:
+# <window ID> <desktop ID> <client machine> <window title>
+FIREFOX_WINDOW=`wmctrl -l | grep -Po "^0x[0-9a-f]+(?=[[:space:]]+ $WORKSPACE .* Firefox)"`
+if [ $? -eq 0 ]
+then
+  wmctrl -i -a "$FIREFOX_WINDOW"
+  firefox --new-tab "$@"
+else
+  echo "no fox to ignite"
+  firefox --new-window "$@"
+fi
