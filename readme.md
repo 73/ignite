@@ -24,3 +24,5 @@ It may work for other distributions and desktop environments, but that is not te
 4. Sanity
 
 
+Did you know there is a [GNOME Theme for Firefox](https://github.com/rafaelmardojai/firefox-gnome-theme)?
+
