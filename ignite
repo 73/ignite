@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 
 function get_firefox_window {
-  gdbus call \
+  dbus-send \
     --session \
-    --dest org.gnome.Shell \
-    --object-path /org/gnome/Shell/Extensions/Windows \
-    --method org.gnome.Shell.Extensions.Windows.List \
-    | sed "s/^('\(.*\)',)$/\1/" \
-    | jq --exit-status '[.[] | select ((.in_current_workspace == true) and (.wm_class | startswith("firefox")))] | first | .id'
+    --dest=org.gnome.Shell \
+    --print-reply=literal \
+    /org/gnome/Shell/Extensions/Windows \
+    org.gnome.Shell.Extensions.Windows.List \
+    | jq --exit-status '
+      [
+        .[] | select (
+          (.in_current_workspace == true) and
+          (.wm_class | startswith("firefox") or endswith("firefox") )
+        )
+      ] | first | .id'
 }
 
 function raise_window {
