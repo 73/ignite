@@ -11,7 +11,10 @@ function get_firefox_window {
       [
         .[] | select (
           (.in_current_workspace == true) and
-          (.wm_class | startswith("firefox") or endswith("firefox") )
+          (
+            (if .wm_class == null then "" else .wm_class end) |
+            startswith("firefox") or endswith("firefox")
+          )
         )
       ] | first | .id'
 }
